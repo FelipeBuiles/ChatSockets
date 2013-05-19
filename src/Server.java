@@ -76,7 +76,7 @@ public class Server {
                 }
                 try {
                     socket.close();
-                } catch (Exception e) {
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
             }

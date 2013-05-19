@@ -19,8 +19,8 @@ public class Cliente
     {
         campoTexto.setEditable(false);
         mensajes.setEditable(false);
-        frame.add(campoTexto, "North");
-        frame.add(new JScrollPane(campoTexto), "Center");
+        frame.add(campoTexto, "SOUTH");
+        frame.add(new JScrollPane(mensajes), "Center");
         frame.pack();
 
         campoTexto.addActionListener(new ActionListener() {
@@ -32,7 +32,7 @@ public class Cliente
     }
 
     private String getNombre() {
-        return JOptionPane.showInputDialog(frame," Escriba su nombre:", "Seleccion de nombre", JOptionPane.PLAIN_MESSAGE);
+        return JOptionPane.showInputDialog(frame," Escriba su nombre:", "Selección de nombre", JOptionPane.PLAIN_MESSAGE);
     }
 
     private void run() throws IOException
@@ -44,13 +44,12 @@ public class Cliente
         while(true)
         {
             String line = in.readLine();
-            System.out.println(line);
             if (line.startsWith("SUBMIT")){
                 out.println(getNombre());
             } else if (line.startsWith("ACCEPTED")){
                 campoTexto.setEditable(true);
             } else if (line.startsWith("MESSAGE")){
-                mensajes.append(line.substring(8) + "\n");
+                mensajes.append(line.substring(7) + "\n");
             }
         }
     }
