@@ -26,8 +26,17 @@ public class Cliente
         campoTexto.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 String salida = campoTexto.getText();
-                if (salida.equals("-quit")){
-                    frame.dispose();
+                String sala;
+                switch (salida) {
+                    case "-salir":
+                        frame.dispose();
+                        break;
+
+                    case "-listarsalas":
+                        break;
+
+                    default:
+                        break;
                 }
                 out.println(salida);
                 campoTexto.setText("");

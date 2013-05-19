@@ -57,7 +57,7 @@ public class Server {
                 try {
                     while (!(input = in.readLine()).equals(null)) {
                         System.out.println(input);
-                        if (input.equals("-quit")){
+                        if (input.equals("-salir")){
                             mostrarMensaje("SERVER-", nombre + " se ha desconectado.");
                             cerrarConexion();
                         } else {
