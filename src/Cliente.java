@@ -12,8 +12,8 @@ public class Cliente
     BufferedReader in;
     PrintWriter out;
     JFrame frame = new JFrame("Aguacate");
-    JTextField campoTexto = new JTextField(50);
-    JTextArea mensajes = new JTextArea(10,10);
+    JTextField campoTexto = new JTextField(40);
+    JTextArea mensajes = new JTextArea(8, 40);
 
     public Cliente()
     {
@@ -24,10 +24,9 @@ public class Cliente
         frame.pack();
 
         campoTexto.addActionListener(new ActionListener() {
-            @Override
             public void actionPerformed(ActionEvent e) {
                 out.println(campoTexto.getText());
-                campoTexto.setText(" ");
+                campoTexto.setText("");
             }
         });
     }
@@ -45,9 +44,10 @@ public class Cliente
         while(true)
         {
             String line = in.readLine();
-            if (line.startsWith("SUBMITNAME")){
+            System.out.println(line);
+            if (line.startsWith("SUBMIT")){
                 out.println(getNombre());
-            } else if (line.startsWith("NAMEACCEPTED")){
+            } else if (line.startsWith("ACCEPTED")){
                 campoTexto.setEditable(true);
             } else if (line.startsWith("MESSAGE")){
                 mensajes.append(line.substring(8) + "\n");

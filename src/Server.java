@@ -39,7 +39,7 @@ public class Server {
                 out = new PrintWriter(socket.getOutputStream(), true);
 
                 while(true) {
-                    out.println(" ..Nombre de Usuario?");
+                    out.println("SUBMIT");
                     nombre = in.readLine();
                     if (nombre == null) {
                         return;
@@ -51,7 +51,7 @@ public class Server {
                         }
                     }
                 }
-                out.println(" ..Registro exitoso.");
+                out.println("ACCEPTED");
                 writers.add(out);
                 while (true) {
                     String input = in.readLine();
@@ -59,7 +59,7 @@ public class Server {
                         return;
                     }
                     for (PrintWriter writer : writers) {
-                        writer.println(nombre + ": " + input);
+                        writer.println("MESSAGE" + nombre + ": " + input);
                     }
                 }
             } catch (IOException e) {
