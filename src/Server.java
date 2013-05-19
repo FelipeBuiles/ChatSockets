@@ -53,32 +53,44 @@ public class Server {
                 }
                 out.println("ACCEPTED");
                 writers.add(out);
-                while (true) {
-                    String input = in.readLine();
-                    if(input == null) {
-                        return;
-                    }
-                    for (PrintWriter writer : writers) {
-                        writer.println("MESSAGE" + nombre + ": " + input);
-                    }
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                for(PrintWriter writer : writers) {
-                    writer.println(" .." + nombre + "se ha desconectado.");
-                }
-                if (nombre != null) {
-                    usuarios.remove(nombre);
-                }
-                if (out != null) {
-                    writers.remove(out);
-                }
+                String input;
                 try {
-                    socket.close();
-                } catch (IOException e) {
+                    while (!(input = in.readLine()).equals(null)) {
+                        System.out.println(input);
+                        if (input.equals("-quit")){
+                            mostrarMensaje("SERVER-", nombre + " se ha desconectado.");
+                            cerrarConexion();
+                        } else {
+                            mostrarMensaje(nombre, input);
+                        }
+                    }
+                } catch (SocketException e) {
                     e.printStackTrace();
                 }
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                cerrarConexion();
+            }
+        }
+
+        private void mostrarMensaje(String nombre, String input) {
+            for (PrintWriter writer : writers) {
+                writer.println("MESSAGE" + nombre + ": " + input);
+            }
+        }
+
+        private void cerrarConexion() {
+            if (nombre != null) {
+                usuarios.remove(nombre);
+            }
+            if (out != null) {
+                writers.remove(out);
+            }
+            try {
+                socket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }

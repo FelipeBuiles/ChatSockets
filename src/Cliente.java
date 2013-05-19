@@ -19,13 +19,17 @@ public class Cliente
     {
         campoTexto.setEditable(false);
         mensajes.setEditable(false);
-        frame.add(campoTexto, "SOUTH");
+        frame.add(campoTexto, "South");
         frame.add(new JScrollPane(mensajes), "Center");
         frame.pack();
 
         campoTexto.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                out.println(campoTexto.getText());
+                String salida = campoTexto.getText();
+                if (salida.equals("-quit")){
+                    frame.dispose();
+                }
+                out.println(salida);
                 campoTexto.setText("");
             }
         });
