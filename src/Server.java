@@ -4,12 +4,13 @@ import java.util.HashSet;
 
 public class Server {
     private static final int PORT = 6789;
+    private static final int NUMUSUARIOS = 100;
     private static HashSet<String> usuarios = new HashSet<String>();
     private static HashSet<PrintWriter> writers = new HashSet<PrintWriter>();
 
     public static void main(String[] args) throws Exception {
         System.out.print(" ..Empezando...");
-        ServerSocket socket = new ServerSocket(PORT);
+        ServerSocket socket = new ServerSocket(PORT, NUMUSUARIOS);
         try {
             while (true) {
                 new Handler(socket.accept()).start();
@@ -17,6 +18,7 @@ public class Server {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
+            System.out.println(" ..Cerrrando conexión.");
             socket.close();
         }
     }
@@ -63,6 +65,9 @@ public class Server {
             } catch (IOException e) {
                 e.printStackTrace();
             } finally {
+                for(PrintWriter writer : writers) {
+                    writer.println(" .." + nombre + "se ha desconectado.");
+                }
                 if (nombre != null) {
                     usuarios.remove(nombre);
                 }
