@@ -67,11 +67,11 @@ public class Server {
                             cerrarConexion();
                         } else if (input.equals("-listarusuarios")) {
                             for (Map.Entry<String, String> usuario : usuarios.entrySet()) {
-                                out.println("MESSAGE" + usuario.getKey() + " - " + usuario.getValue());
+                                out.println("SERVER-" + usuario.getKey() + " - " + usuario.getValue());
                             }
                         } else if (input.equals("-listarsalas")) {
                             for (String sala : salas) {
-                                out.println("MESSAGE" + sala);
+                                out.println("SERVER-" + sala);
                             }
                         } else if (input.startsWith("-unirse")) {
                             sala = input.substring(8);
@@ -79,7 +79,9 @@ public class Server {
                                 salas.add(sala);
                             }
                             usuarios.put(nombre, sala);
-                            out.println("MESSAGE te has unido a " + sala);
+                            out.println("SERVER- te has unido a " + sala);
+                        } else if (input.equals("-salirsala")) {
+                            usuarios.put(nombre, antesala);
                         }
 
                         else {
@@ -98,7 +100,7 @@ public class Server {
 
         private void mostrarMensaje(String nombre, String input) {
             for (PrintWriter writer : writers) {
-                writer.println("MESSAGE" + nombre + ": " + input);
+                writer.println("MESSAGE " + usuarios.get(nombre) + " >>" + nombre + ": " + input);
             }
         }
 

@@ -31,7 +31,7 @@ public class Cliente
                 if (salida.equals("-salir")) {
                     frame.dispose();
                 } else if (salida.startsWith("-unirse")) {
-                    //sala = salida.substring(8);
+                    sala = salida.substring(8);
                 } else if (salida.equals("-salirsala")) {
                     sala = "antesala";
                 }
@@ -57,7 +57,7 @@ public class Cliente
                 out.println(getNombre());
             } else if (line.startsWith("ACCEPTED")){
                 campoTexto.setEditable(true);
-            } else if (line.startsWith("MESSAGE")){
+            } else if ((line.startsWith("MESSAGE " + sala)) || line.startsWith("SERVER")){
                 mensajes.append(line.substring(7) + "\n");
             }
         }
