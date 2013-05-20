@@ -1,12 +1,15 @@
 import java.io.*;
 import java.net.*;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 
 public class Server {
     private static final int PORT = 6789;
     private static final int NUMUSUARIOS = 100;
-    private static HashSet<String> usuarios = new HashSet<String>();
+    private static HashMap<String, String> usuarios = new HashMap<String, String>();
     private static HashSet<PrintWriter> writers = new HashSet<PrintWriter>();
+    private static String antesala = "antesala";
 
     public static void main(String[] args) throws Exception {
         System.out.print(" ..Empezando...");
@@ -45,8 +48,8 @@ public class Server {
                         return;
                     }
                     synchronized (usuarios) {
-                        if (!usuarios.contains(nombre)) {
-                            usuarios.add(nombre);
+                        if (!usuarios.containsKey(nombre)) {
+                            usuarios.put(nombre, antesala);
                             break;
                         }
                     }
@@ -57,10 +60,16 @@ public class Server {
                 try {
                     while (!(input = in.readLine()).equals(null)) {
                         System.out.println(input);
-                        if (input.equals("-salir")){
+                        if (input.equals("-salir")) {
                             mostrarMensaje("SERVER-", nombre + " se ha desconectado.");
                             cerrarConexion();
-                        } else {
+                        } else if (input.equals("-listarusuarios")) {
+                            for (Map.Entry<String, String> usuario : usuarios.entrySet()) {
+                                out.println("MESSAGE" + usuario.getKey() + " - " + usuario.getValue());
+                            }
+                        }
+
+                        else {
                             mostrarMensaje(nombre, input);
                         }
                     }

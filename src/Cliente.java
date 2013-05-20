@@ -8,6 +8,7 @@ public class Cliente
 {
     private static final int PORT = 6789;
     private String ADDRESS = "127.0.0.1";
+    private String sala;
 
     BufferedReader in;
     PrintWriter out;
@@ -26,17 +27,13 @@ public class Cliente
         campoTexto.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 String salida = campoTexto.getText();
-                String sala;
-                switch (salida) {
-                    case "-salir":
-                        frame.dispose();
-                        break;
-
-                    case "-listarsalas":
-                        break;
-
-                    default:
-                        break;
+                sala = "antesala";
+                if (salida.equals("-salir")) {
+                    frame.dispose();
+                } else if (salida.startsWith("-unirse")) {
+                    sala = salida.substring(8);
+                } else if (salida.equals("-salirsala")) {
+                    sala = "antesala";
                 }
                 out.println(salida);
                 campoTexto.setText("");
