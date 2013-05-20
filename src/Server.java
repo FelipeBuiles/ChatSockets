@@ -9,6 +9,7 @@ public class Server {
     private static final int NUMUSUARIOS = 100;
     private static HashMap<String, String> usuarios = new HashMap<String, String>();
     private static HashSet<PrintWriter> writers = new HashSet<PrintWriter>();
+    private static HashSet<String> salas = new HashSet<String>();
     private static String antesala = "antesala";
 
     public static void main(String[] args) throws Exception {
@@ -31,9 +32,11 @@ public class Server {
         private Socket socket;
         private BufferedReader in;
         private PrintWriter out;
+        private String sala;
 
         public Handler(Socket socket) {
             this.socket = socket;
+            sala = "antesala";
         }
 
         public void run() {
@@ -67,6 +70,23 @@ public class Server {
                             for (Map.Entry<String, String> usuario : usuarios.entrySet()) {
                                 out.println("MESSAGE" + usuario.getKey() + " - " + usuario.getValue());
                             }
+                        } else if (input.equals("-listarsalas")) {
+                            for (String sala : salas) {
+                                out.println("MESSAGE" + sala);
+                            }
+                        } else if (input.startsWith("-unirse")) {
+                            sala = input;
+                            System.out.print(sala);
+                            if (sala == null) {
+                                return;
+                            }
+                            synchronized (salas) {
+                                if (!salas.contains(sala)) {
+                                    salas.add(sala);
+                                    break;
+                                }
+                            }
+                            usuarios.put(nombre, sala);
                         }
 
                         else {
