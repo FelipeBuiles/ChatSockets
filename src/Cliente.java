@@ -31,7 +31,7 @@ public class Cliente
                 if (salida.equals("-salir")) {
                     frame.dispose();
                 } else if (salida.startsWith("-unirse")) {
-                    sala = salida.substring(8);
+                    //sala = salida.substring(8);
                 } else if (salida.equals("-salirsala")) {
                     sala = "antesala";
                 }
@@ -51,9 +51,8 @@ public class Cliente
         in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         out = new PrintWriter(socket.getOutputStream(), true);
 
-        while(true)
-        {
-            String line = in.readLine();
+        String line;
+        while(!(line = in.readLine()).equals(null)) {
             if (line.startsWith("SUBMIT")){
                 out.println(getNombre());
             } else if (line.startsWith("ACCEPTED")){

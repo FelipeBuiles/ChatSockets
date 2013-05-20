@@ -62,7 +62,6 @@ public class Server {
                 String input;
                 try {
                     while (!(input = in.readLine()).equals(null)) {
-                        System.out.println(input);
                         if (input.equals("-salir")) {
                             mostrarMensaje("SERVER-", nombre + " se ha desconectado.");
                             cerrarConexion();
@@ -75,18 +74,12 @@ public class Server {
                                 out.println("MESSAGE" + sala);
                             }
                         } else if (input.startsWith("-unirse")) {
-                            sala = input;
-                            System.out.print(sala);
-                            if (sala == null) {
-                                return;
-                            }
-                            synchronized (salas) {
-                                if (!salas.contains(sala)) {
-                                    salas.add(sala);
-                                    break;
-                                }
+                            sala = input.substring(8);
+                            if (!salas.contains(sala)) {
+                                salas.add(sala);
                             }
                             usuarios.put(nombre, sala);
+                            out.println("MESSAGE te has unido a " + sala);
                         }
 
                         else {
