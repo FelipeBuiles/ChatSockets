@@ -8,7 +8,7 @@ public class Cliente
 {
     private static final int PORT = 6789;
     private String ADDRESS = "127.0.0.1";
-    private String sala;
+    String sala = "antesala";
 
     BufferedReader in;
     PrintWriter out;
@@ -30,11 +30,13 @@ public class Cliente
             public void actionPerformed(ActionEvent e) {
                 String salida = campoTexto.getText();
                 mensajes.setCaretPosition(mensajes.getDocument().getLength());
-                sala = "antesala";
                 if (salida.equals("-salir")) {
                     frame.dispose();
-                } else if (salida.startsWith("-unirse")) {
-                    sala = salida.substring(8);
+                } else if (salida.equals("-unirse")) {
+                    salida = "ERROR404";
+                }
+                else if (salida.startsWith("-unirse ")) {
+                    setSala(salida.substring(8));
                 } else if (salida.equals("-salirsala")) {
                     sala = "antesala";
                 }
@@ -42,6 +44,10 @@ public class Cliente
                 campoTexto.setText("");
             }
         });
+    }
+
+    private void setSala(String sala) {
+        this.sala = sala;
     }
 
     private String getNombre() {
@@ -56,11 +62,14 @@ public class Cliente
 
         String line;
         while(!(line = in.readLine()).equals(null)) {
+
             if (line.startsWith("SUBMIT")){
                 out.println(getNombre());
             } else if (line.startsWith("ACCEPTED")){
                 campoTexto.setEditable(true);
-            } else if ((line.startsWith("MESSAGE " + sala)) || line.startsWith("SERVER")){
+            } else if (line.startsWith("SERVER")) {
+                mensajes.append(line.substring(7) + "\n");
+            } else if ((line.startsWith("MESSAGE [")) && (line.substring(line.indexOf("[")+1, line.indexOf("]")).equals(sala))){
                 mensajes.append(line.substring(7) + "\n");
             }
         }
@@ -68,7 +77,7 @@ public class Cliente
 
     public static void main(String[] args) throws Exception {
         Cliente cliente = new Cliente();
-        cliente.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        cliente.frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         cliente.frame.setVisible(true);
         cliente.run();
     }

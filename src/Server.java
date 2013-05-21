@@ -13,7 +13,7 @@ public class Server {
     private static String antesala = "antesala";
 
     public static void main(String[] args) throws Exception {
-        System.out.print(" ..Empezando...");
+        System.out.println(" ..Empezando...");
         ServerSocket socket = new ServerSocket(PORT, NUMUSUARIOS);
         try {
             while (true) {
@@ -63,7 +63,7 @@ public class Server {
                 try {
                     while (!(input = in.readLine()).equals(null)) {
                         if (input.equals("-salir")) {
-                            mostrarMensaje("SERVER-", nombre + " se ha desconectado.");
+                            broadcast("SERVER-", nombre + " se ha desconectado.");
                             cerrarConexion();
                         } else if (input.equals("-listarusuarios")) {
                                 out.println("SERVER- Usuarios:");
@@ -81,14 +81,16 @@ public class Server {
                                 salas.add(sala);
                             }
                             usuarios.put(nombre, sala);
-                            out.println("SERVER- Te has unido a " + sala);
+                            out.println("SERVER- Te has unido a " + sala + ".");
                         } else if (input.equals("-salirsala")) {
-                            out.println("SERVER- Has salido exitosamente de la sala");
+                            out.println("SERVER- Has salido exitosamente de la sala.");
                             usuarios.put(nombre, antesala);
+                        } else if (input.equals("ERROR404")) {
+                            out.println("SERVER- Por favor ingrese el nombre de la sala.");
                         }
 
                         else {
-                            mostrarMensaje(nombre, input);
+                            broadcast(nombre, input);
                         }
                     }
                 } catch (SocketException e) {
@@ -101,9 +103,9 @@ public class Server {
             }
         }
 
-        private void mostrarMensaje(String nombre, String input) {
+        private void broadcast(String nombre, String input) {
             for (PrintWriter writer : writers) {
-                writer.println("MESSAGE " + usuarios.get(nombre) + " >>" + nombre + ": " + input);
+                writer.println("MESSAGE " + "[" + usuarios.get(nombre) + "] " + nombre + ": " + input);
             }
         }
 
