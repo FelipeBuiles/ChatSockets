@@ -59,6 +59,8 @@ public class Server {
                         if (!usuarios.containsKey(nombre)) {
                             usuarios.put(nombre, antesala);
                             break;
+                        } else {
+                            out.println("ERROR101");
                         }
                     }
                 }
@@ -76,7 +78,11 @@ public class Server {
                                 out.println("SERVER-" + usuario.getKey() + " - " + usuario.getValue());
                             }
                         } else if (input.equals("-listarsalas")) {
+                            if (salas.isEmpty()){
+                                out.println("SERVER- No hay salas.");
+                            } else {
                                 out.println("SERVER- Salas:");
+                            }
                             for (String sala : salas) {
                                 int cont = 0;
                                 for(Map.Entry<String, String> usuario : usuarios.entrySet()) {

@@ -110,6 +110,8 @@ public class Cliente
             if (line.startsWith("SUBMIT")){
                 getNombre();
                 out.println(NOMBRE);
+            } else if (line.equals("ERROR101")) {
+                JOptionPane.showMessageDialog(frame, "El usuario ya existe.", "Error de validación", JOptionPane.ERROR_MESSAGE);
             } else if (line.startsWith("ACCEPTED")){
                 campoTexto.setEditable(true);
             } else if (line.startsWith("SERVER")) {
