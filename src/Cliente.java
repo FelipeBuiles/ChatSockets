@@ -15,18 +15,21 @@ public class Cliente
     JFrame frame = new JFrame("Aguacate");
     JTextField campoTexto = new JTextField(40);
     JTextArea mensajes = new JTextArea(8, 40);
+    JScrollPane scroll = new JScrollPane(mensajes);
 
     public Cliente()
     {
         campoTexto.setEditable(false);
         mensajes.setEditable(false);
+        mensajes.setLineWrap(true);
         frame.add(campoTexto, "South");
-        frame.add(new JScrollPane(mensajes), "Center");
+        frame.add(scroll, "Center");
         frame.pack();
 
         campoTexto.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 String salida = campoTexto.getText();
+                mensajes.setCaretPosition(mensajes.getDocument().getLength());
                 sala = "antesala";
                 if (salida.equals("-salir")) {
                     frame.dispose();
