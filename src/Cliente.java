@@ -2,20 +2,22 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
 import java.net.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.swing.*;
 
 public class Cliente
 {
-    private static int PORT;
+    private static int PORT = 0;
     private static String ADDRESS;
     private String sala = "antesala";
 
-    BufferedReader in;
-    PrintWriter out;
-    JFrame frame = new JFrame("Aguacate");
-    JTextField campoTexto = new JTextField(40);
-    JTextArea mensajes = new JTextArea(8, 40);
-    JScrollPane scroll = new JScrollPane(mensajes);
+    private BufferedReader in;
+    private PrintWriter out;
+    private final JFrame frame = new JFrame("Aguacate");
+    private final JTextField campoTexto = new JTextField(40);
+    private final JTextArea mensajes = new JTextArea(8, 40);
+    private final JScrollPane scroll = new JScrollPane(mensajes);
 
     public Cliente()
     {
@@ -55,11 +57,23 @@ public class Cliente
     }
 
     private void getAddress() {
+        Pattern patronAddress = Pattern.compile(
+                "^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
+                "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
+                "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
+                "([01]?\\d\\d?|2[0-4]\\d|25[0-5])$");
         ADDRESS = JOptionPane.showInputDialog(frame, "Escriba la dirección del servidor", "Selección de servidor", JOptionPane.PLAIN_MESSAGE);
+        Matcher matcher = patronAddress.matcher(ADDRESS);
+        while (!matcher.find()) {
+            getAddress();
+        }
     }
 
     private void getPort() {
         PORT = Integer.parseInt(JOptionPane.showInputDialog(frame, "Escriba el puerto del servidor", "Selección de puerto", JOptionPane.PLAIN_MESSAGE));
+        if (PORT > 65535 || PORT < 1) {
+            getPort();
+        }
     }
 
     private void run() throws IOException

@@ -3,22 +3,21 @@ import java.net.*;
 import java.util.*;
 
 public class Server {
-    private static int PORT, NUMUSUARIOS;
-    private static HashMap<String, String> usuarios = new HashMap<String, String>();
-    private static HashSet<PrintWriter> writers = new HashSet<PrintWriter>();
-    private static HashSet<String> salas = new HashSet<String>();
-    private static ArrayList<String> salasaBorrar = new ArrayList<String>();
-    private static String antesala = "antesala";
+    private static final HashMap<String, String> usuarios = new HashMap<String, String>();
+    private static final HashSet<PrintWriter> writers = new HashSet<PrintWriter>();
+    private static final HashSet<String> salas = new HashSet<String>();
+    private static final ArrayList<String> salasABorrar = new ArrayList<String>();
 
     public static void main(String[] args) throws Exception {
         Scanner s = new Scanner(System.in);
         System.out.println(" ..Puerto?");
-        PORT = s.nextInt();
+        int PORT = s.nextInt();
         System.out.println(" ..Numero de usuarios?");
-        NUMUSUARIOS = s.nextInt();
+        int NUMUSUARIOS = s.nextInt();
         System.out.println(" ..Empezando...");
         ServerSocket socket = new ServerSocket(PORT, NUMUSUARIOS);
         try {
+            //noinspection InfiniteLoopStatement
             while (true) {
                 new Handler(socket.accept()).start();
             }
@@ -30,9 +29,10 @@ public class Server {
         }
     }
 
+    @SuppressWarnings("ConstantConditions")
     private static class Handler extends Thread {
         private String nombre;
-        private Socket socket;
+        private final Socket socket;
         private BufferedReader in;
         private PrintWriter out;
         private String sala;
@@ -42,11 +42,13 @@ public class Server {
             sala = "antesala";
         }
 
+        @SuppressWarnings("ConstantConditions")
         public void run() {
             try {
                 in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 out = new PrintWriter(socket.getOutputStream(), true);
 
+                String antesala = "antesala";
                 while(true) {
                     out.println("SUBMIT");
                     nombre = in.readLine();
@@ -83,11 +85,11 @@ public class Server {
                                     }
                                 }
                                 if (cont == 0) {
-                                    salasaBorrar.add(sala);
+                                    salasABorrar.add(sala);
                                 }
                                 out.println("SERVER-"+ sala + " : " + cont);
                             }
-                            for (String sala : salasaBorrar) {
+                            for (String sala : salasABorrar) {
                                 salas.remove(sala);
                             }
                         } else if (input.startsWith("-unirse")) {
