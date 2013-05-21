@@ -66,12 +66,14 @@ public class Server {
                             mostrarMensaje("SERVER-", nombre + " se ha desconectado.");
                             cerrarConexion();
                         } else if (input.equals("-listarusuarios")) {
+                                out.println("SERVER- Usuarios:");
                             for (Map.Entry<String, String> usuario : usuarios.entrySet()) {
                                 out.println("SERVER-" + usuario.getKey() + " - " + usuario.getValue());
                             }
                         } else if (input.equals("-listarsalas")) {
+                                out.println("SERVER- Salas:");
                             for (String sala : salas) {
-                                out.println("SERVER-" + sala);
+                                out.println("SERVER-"+ sala);
                             }
                         } else if (input.startsWith("-unirse")) {
                             sala = input.substring(8);
@@ -79,8 +81,9 @@ public class Server {
                                 salas.add(sala);
                             }
                             usuarios.put(nombre, sala);
-                            out.println("SERVER- te has unido a " + sala);
+                            out.println("SERVER- Te has unido a " + sala);
                         } else if (input.equals("-salirsala")) {
+                            out.println("SERVER- Has salido exitosamente de la sala");
                             usuarios.put(nombre, antesala);
                         }
 
