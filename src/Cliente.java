@@ -6,9 +6,9 @@ import javax.swing.*;
 
 public class Cliente
 {
-    private static final int PORT = 6789;
-    private String ADDRESS = "127.0.0.1";
-    String sala = "antesala";
+    private static int PORT;
+    private static String ADDRESS;
+    private String sala = "antesala";
 
     BufferedReader in;
     PrintWriter out;
@@ -54,8 +54,18 @@ public class Cliente
         return JOptionPane.showInputDialog(frame," Escriba su nombre:", "Selección de nombre", JOptionPane.PLAIN_MESSAGE);
     }
 
+    private void getAddress() {
+        ADDRESS = JOptionPane.showInputDialog(frame, "Escriba la dirección del servidor", "Selección de servidor", JOptionPane.PLAIN_MESSAGE);
+    }
+
+    private void getPort() {
+        PORT = Integer.parseInt(JOptionPane.showInputDialog(frame, "Escriba el puerto del servidor", "Selección de puerto", JOptionPane.PLAIN_MESSAGE));
+    }
+
     private void run() throws IOException
     {
+        getAddress();
+        getPort();
         Socket socket = new Socket(ADDRESS, PORT);
         in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         out = new PrintWriter(socket.getOutputStream(), true);

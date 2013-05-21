@@ -3,16 +3,21 @@ import java.net.*;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Scanner;
 
 public class Server {
-    private static final int PORT = 6789;
-    private static final int NUMUSUARIOS = 100;
+    private static int PORT, NUMUSUARIOS;
     private static HashMap<String, String> usuarios = new HashMap<String, String>();
     private static HashSet<PrintWriter> writers = new HashSet<PrintWriter>();
     private static HashSet<String> salas = new HashSet<String>();
     private static String antesala = "antesala";
 
     public static void main(String[] args) throws Exception {
+        Scanner s = new Scanner(System.in);
+        System.out.println(" ..Puerto?");
+        PORT = s.nextInt();
+        System.out.println(" ..Numero de usuarios?");
+        NUMUSUARIOS = s.nextInt();
         System.out.println(" ..Empezando...");
         ServerSocket socket = new ServerSocket(PORT, NUMUSUARIOS);
         try {
@@ -73,7 +78,13 @@ public class Server {
                         } else if (input.equals("-listarsalas")) {
                                 out.println("SERVER- Salas:");
                             for (String sala : salas) {
-                                out.println("SERVER-"+ sala);
+                                int cont = 0;
+                                for(Map.Entry<String, String> usuario : usuarios.entrySet()) {
+                                    if (usuario.getValue().equals(sala)) {
+                                        cont++;
+                                    }
+                                }
+                                out.println("SERVER-"+ sala + " : " + cont);
                             }
                         } else if (input.startsWith("-unirse")) {
                             sala = input.substring(8);
