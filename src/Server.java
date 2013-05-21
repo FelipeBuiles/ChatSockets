@@ -1,15 +1,13 @@
 import java.io.*;
 import java.net.*;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 public class Server {
     private static int PORT, NUMUSUARIOS;
     private static HashMap<String, String> usuarios = new HashMap<String, String>();
     private static HashSet<PrintWriter> writers = new HashSet<PrintWriter>();
     private static HashSet<String> salas = new HashSet<String>();
+    private static ArrayList<String> salasaBorrar = new ArrayList<String>();
     private static String antesala = "antesala";
 
     public static void main(String[] args) throws Exception {
@@ -84,15 +82,24 @@ public class Server {
                                         cont++;
                                     }
                                 }
+                                if (cont == 0) {
+                                    salasaBorrar.add(sala);
+                                }
                                 out.println("SERVER-"+ sala + " : " + cont);
+                            }
+                            for (String sala : salasaBorrar) {
+                                salas.remove(sala);
                             }
                         } else if (input.startsWith("-unirse")) {
                             sala = input.substring(8);
                             if (!salas.contains(sala)) {
                                 salas.add(sala);
+                            } if (usuarios.get(nombre).equals(sala)) {
+                                out.println("SERVER- Ya perteneces a esta sala.");
+                            } else {
+                                usuarios.put(nombre, sala);
+                                out.println("SERVER- Te has unido a " + sala + ".");
                             }
-                            usuarios.put(nombre, sala);
-                            out.println("SERVER- Te has unido a " + sala + ".");
                         } else if (input.equals("-salirsala")) {
                             out.println("SERVER- Has salido exitosamente de la sala.");
                             usuarios.put(nombre, antesala);
