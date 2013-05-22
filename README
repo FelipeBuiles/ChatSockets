@@ -1,1 +1,13 @@
 Chat multiusuario, multisala, multipropósito, multiaguacate.
+
+Al iniciar el cliente, el programa va a preguntar por la direccon ip del servidor y el puerto.
+Si la conexion es exitosa, el programa luego le indica al usuario que registre su nombre de usuario.
+
+Una vez dentro de la sala el usuario tiene varios comandos disponibles:
+
+  -listarusuarios:      muestra una lista de los usuarios registrados y la sala en que se encuentran
+  -listarsalas:         muestra una lista de las salas existentes y el numero de usuarios en cada una 
+  -unirse <nombresala>  registra al usuario en la sala que se indica, en caso de que esta no exista, primero crea la sala y luego registra al usuario en ella
+  -salirsala            devuelve al usuario a la antesala
+  -salir                cierra la conexion y el programa
+  
