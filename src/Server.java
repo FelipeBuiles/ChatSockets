@@ -68,7 +68,7 @@ public class Server {
                 writers.add(out);
                 String input;
                 try {
-                    while (!(input = in.readLine()).equals(null)) {
+                    while (!((input = in.readLine()) == null)) {
                         if (input.equals("-salir")) {
                             broadcast("SERVER-", nombre + " se ha desconectado.");
                             cerrarConexion();

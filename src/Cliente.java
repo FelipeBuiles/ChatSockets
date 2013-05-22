@@ -8,18 +8,17 @@ import javax.swing.*;
 
 public class Cliente
 {
-    private static String PORT_st = "0";
     private static int PORT = 0;
     private static String NOMBRE = "";
-    private static String ADDRESS = "0.0.0.0";
+    private static String ADDRESS = "";
     private String sala = "antesala";
+    private static Socket socket;
 
     private BufferedReader in;
     private PrintWriter out;
-    private final JFrame frame = new JFrame("Aguacate");
+    private static final JFrame frame = new JFrame("Aguacate");
     private final JTextField campoTexto = new JTextField(40);
     private final JTextArea mensajes = new JTextArea(8, 40);
-    private final JScrollPane scroll = new JScrollPane(mensajes);
 
     public Cliente()
     {
@@ -27,6 +26,7 @@ public class Cliente
         mensajes.setEditable(false);
         mensajes.setLineWrap(true);
         frame.add(campoTexto, "South");
+        JScrollPane scroll = new JScrollPane(mensajes);
         frame.add(scroll, "Center");
         frame.pack();
 
@@ -35,8 +35,7 @@ public class Cliente
                 String salida = campoTexto.getText();
                 mensajes.setCaretPosition(mensajes.getDocument().getLength());
                 if (salida.equals("-salir")) {
-                    frame.dispose();
-                    System.exit(0);
+                    cerrarConexion();
                 } else if (salida.equals("-unirse")) {
                     salida = "ERROR404";
                 }
@@ -58,8 +57,7 @@ public class Cliente
     private void getNombre() {
         NOMBRE = JOptionPane.showInputDialog(frame," Escriba su nombre:", "Selección de nombre", JOptionPane.PLAIN_MESSAGE);
         if (NOMBRE == null) {
-            frame.dispose();
-            System.exit(0);
+            cerrarConexion();
         }
     }
 
@@ -71,8 +69,7 @@ public class Cliente
                 "([01]?\\d\\d?|2[0-4]\\d|25[0-5])$");
         ADDRESS = JOptionPane.showInputDialog(frame, "Escriba la dirección del servidor", "Selección de servidor", JOptionPane.PLAIN_MESSAGE);
         if (ADDRESS == null) {
-            frame.dispose();
-            System.exit(0);
+            cerrarConexion();
         }
         Matcher matcher = patronAddress.matcher(ADDRESS);
         while (!matcher.find()) {
@@ -81,10 +78,9 @@ public class Cliente
     }
 
     private void getPort() {
-        PORT_st = JOptionPane.showInputDialog(frame, "Escriba el puerto del servidor", "Selección de puerto", JOptionPane.PLAIN_MESSAGE);
+        String PORT_st = JOptionPane.showInputDialog(frame, "Escriba el puerto del servidor", "Selección de puerto", JOptionPane.PLAIN_MESSAGE);
         if (PORT_st == null) {
-            frame.dispose();
-            System.exit(0);
+            cerrarConexion();
         }
         PORT = Integer.parseInt(PORT_st);
         if (PORT > 65535 || PORT < 1) {
@@ -97,12 +93,12 @@ public class Cliente
         getAddress();
         getPort();
         try {
-            Socket socket = new Socket(ADDRESS, PORT);
+            socket = new Socket(ADDRESS, PORT);
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream(), true);
         } catch (ConnectException e) {
             JOptionPane.showMessageDialog(frame, "Puerto o Dirección inválidos.", "Error de conexión", JOptionPane.ERROR_MESSAGE);
-            frame.dispose();
+            cerrarConexion();
         }
         String line;
         while(!((line = in.readLine()) == null)) {
@@ -116,16 +112,28 @@ public class Cliente
                 campoTexto.setEditable(true);
             } else if (line.startsWith("SERVER")) {
                 mensajes.append(line.substring(7) + "\n");
-            } else if ((line.startsWith("MESSAGE [")) && (line.substring(line.indexOf("[")+1, line.indexOf("]")).equals(sala))){
+            } else if ((line.startsWith("MESSAGE")) && (line.substring(line.indexOf("[")+1, line.indexOf("]")).equals(sala))){
                 mensajes.append(line.substring(7) + "\n");
             }
         }
     }
 
+    private static void cerrarConexion() {
+        frame.dispose();
+        if (socket != null){
+            try {
+                socket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        System.exit(0);
+    }
+
     public static void main(String[] args) throws Exception {
         Cliente cliente = new Cliente();
-        cliente.frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        cliente.frame.setVisible(true);
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        frame.setVisible(true);
         cliente.run();
     }
 }
