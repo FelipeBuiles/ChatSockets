@@ -1,4 +1,4 @@
-Chat multiusuario, multisala, multipropósito, multiaguacate.
+Chat multiusuario, multisala.
 
 Al iniciar el cliente, el programa va a preguntar por la direccon ip del servidor y el puerto.
 Si la conexion es exitosa, el programa luego le indica al usuario que registre su nombre de usuario.
